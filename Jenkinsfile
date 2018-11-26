@@ -4,6 +4,7 @@ node {
     }
 
     stage('build') {
+        sh 'mvn clean package'
         acrQuickTask azureCredentialsId: '438bf5b7-50d9-413d-876f-1f2ad7b1c650', 
             imageNames: [[image: 'mywebapi:latest']], 
             registryName: 'jiesheacr', 
