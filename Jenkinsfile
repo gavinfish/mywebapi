@@ -26,10 +26,10 @@ node {
             spaceName: env.DEV_SPACE,
             dockerCredentials: [[credentialsId: env.ACR_CRED_ID, url: env.ACR_URL]]
 
-        sh "curl http://$azdsspace.$env.TEST_ENDPOINT"
+        sh "curl http://$env.azdsspace.$env.TEST_ENDPOINT"
     }
 
     stage('test') {
-        sh "curl http://$env.azdsspace.$env.TEST_ENDPOINT"
+        sh "curl http://$azdsspace.$env.TEST_ENDPOINT"
     }
 }
