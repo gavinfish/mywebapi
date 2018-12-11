@@ -13,6 +13,6 @@ public class Application {
 
     @RequestMapping(value = "/", produces = "text/plain")
     public String index() {
-        return "Hello from mywebapi in PC's namespace";
+        return "Hello from PC's webapi";
     }
 }
