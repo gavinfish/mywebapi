@@ -23,7 +23,7 @@ node {
             secretName: env.SECRET_NAME, 
             secretNamespace: env.SECRET_NAMESPACE, 
             sharedSpaceName: env.PARENT_DEV_SPACE, 
-            spaceName: env.DEV_SPACE,
+            spaceName: env.GITHUB_PR_SOURCE_BRANCH,
             dockerCredentials: [[credentialsId: env.ACR_CRED_ID, url: env.ACR_URL]]
     }
 
