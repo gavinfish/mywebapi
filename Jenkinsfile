@@ -8,7 +8,8 @@ node {
             imageNames: [[image: "$env.ACR_REGISTRY/$env.IMAGE_NAME:$env.BUILD_NUMBER"]], 
             registryName: env.ACR_NAME, 
             resourceGroupName: env.ACR_RES_GROUP, 
-            dockerfile: 'Dockerfile.develop'
+            dockerfile: 'Dockerfile.develop',
+            variant: ''
     }
 
     stage('deploy') {
