@@ -9,7 +9,8 @@ node {
             registryName: env.ACR_NAME, 
             resourceGroupName: env.ACR_RES_GROUP, 
             dockerfile: 'Dockerfile.develop',
-            variant: ''
+            architecture:'ARM',
+            variant: 'v6'
     }
 
     stage('deploy') {
