@@ -10,7 +10,8 @@ node {
             resourceGroupName: env.ACR_RES_GROUP, 
             dockerfile: 'Dockerfile.develop',
             architecture:'ARM',
-            variant: 'v6'
+            variant: 'v6',
+            timeout: 3000
     }
 
     stage('deploy') {
