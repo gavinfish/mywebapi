@@ -24,7 +24,7 @@ node {
     }
 
     stage('deploy') {
-        kubernetesDeploy deployTypeClass: [configs: 'kubeconfigs/**'],
+        kubernetesDeploy deployTypeClass: [configs: 'kubeconfigs/**'], deployType: 'kubernetes',
             dockerCredentials: [[credentialsId: env.ACR_CRED_ID, url: "http://$env.ACR_REGISTRY"]],
             kubeconfigId: env.KUBE_CONFIG_ID,
             secretNamespace: env.GITHUB_PR_SOURCE_BRANCH
