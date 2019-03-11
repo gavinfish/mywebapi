@@ -31,7 +31,7 @@ node('master') {
             helmCommandType: 'install', 
             helmWait: true, 
             tillerNamespace: 'azds'], 
-            kubeconfigId: 'adskubeconfig']
+            kubeconfigId: 'adskubeconfig'
     }
 
     stage('smoketest') {
