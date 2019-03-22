@@ -2,6 +2,7 @@ node('master') {
     // Variable to record user's input
     def userInput
     def devSpaceNamespace = "$env.GITHUB_PR_SOURCE_BRANCH-helm"
+    def releaseName = "mywebapi${devSpaceNamespace}"
 
     stage('init') {
         checkout scm
@@ -28,7 +29,7 @@ node('master') {
         def registrySecretName = "helm-secret-$env.BUILD_NUMBER"
         sh "kubectl create secret docker-registry ${registrySecretName} --docker-server=$env.ACR_REGISTRY --docker-username=$env.ACR_NAME --docker-password=$env.ACR_SECRET --namespace=${devSpaceNamespace}"
         sh "helm init --tiller-namespace azds"
-        sh "helm upgrade  mywebapi${devSpaceNamespace} ./charts/mywebapi --install --namespace ${devSpaceNamespace} --set image.repository=$env.ACR_REGISTRY/$env.IMAGE_NAME --set image.tag=$env.BUILD_NUMBER --set ingress.hosts={localhost}  --set imagePullSecrets[0].name=${registrySecretName} --tiller-namespace azds"
+        sh "helm upgrade ${releaseName} ./charts/mywebapi --install --namespace ${devSpaceNamespace} --set image.repository=$env.ACR_REGISTRY/$env.IMAGE_NAME --set image.tag=$env.BUILD_NUMBER --set ingress.hosts={localhost}  --set imagePullSecrets[0].name=${registrySecretName} --tiller-namespace azds"
     }
 
     stage('smoketest') {
@@ -64,7 +65,7 @@ node('master') {
         // Wait for users to decide whether continue the process
         try {
             userInput = input(
-                id: 'Proceed1', message: 'Do you want to continue?', parameters: [
+                id: 'Proceed1', message: 'Do you want to apply changes in shared namespace and delete private dev space?', parameters: [
                 [$class: 'BooleanParameterDefinition', defaultValue: true, description: '', name: 'Please confirm you want to continue the process']
                 ])
         } catch(err) { // input false
@@ -81,16 +82,17 @@ node('master') {
             // verify the staging environment is working properly
         }
 
+        stage('cleanup') {
+            devSpacesCleanup aksName: env.AKS_NAME, 
+                azureCredentialsId: env.AZURE_CRED_ID, 
+                devSpaceName: devSpaceNamespace, 
+                kubeConfigId: env.KUBE_CONFIG_ID, 
+                resourceGroupName: env.AKS_RES_GROUP,
+                helmReleaseName: releaseName
+        }
+
     } else {
         // Send a notification
     } 
 
-    stage('cleanup') {
-        devSpacesCleanup aksName: env.AKS_NAME, 
-            azureCredentialsId: env.AZURE_CRED_ID, 
-            devSpaceName: devSpaceNamespace, 
-            kubeConfigId: env.KUBE_CONFIG_ID, 
-            resourceGroupName: env.AKS_RES_GROUP,
-            helmReleaseName: "mywebapi${devSpaceNamespace}"
-    }
 }
