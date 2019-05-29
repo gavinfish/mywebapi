@@ -16,7 +16,6 @@ node('master') {
             dockerfile: 'Dockerfile.develop'
     }
 
-
     stage('create dev space') {
         devSpacesCreate aksName: env.AKS_NAME, 
             azureCredentialsId: env.AZURE_CRED_ID, 
