@@ -15,6 +15,7 @@ node('master') {
             resourceGroupName: env.ACR_RES_GROUP, 
             dockerfile: 'Dockerfile.develop'
     }
+    
 
     stage('create dev space') {
         devSpacesCreate aksName: env.AKS_NAME, 
